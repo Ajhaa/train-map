@@ -23,9 +23,25 @@ const MapContainer = styled(Map)`
 const App = () => {
   const [trains, setTrains] = useState([]);
 
+  const getDateString = () => {
+    const date = new Date();
+
+    const year = date.getFullYear();
+
+    let month = date.getMonth() + 1;
+    if (month < 10) month = "0"+ month;
+
+    let day = date.getDate();
+    if (day < 10) day = "0" + day;
+
+    return `${year}-${month}-${day}`;
+  }
+
   const fetchTrains = async () => {
+    const date = getDateString();
+    console.log(date);
     const trains = await axios.get('https://rata.digitraffic.fi/api/v1/train-locations/latest/');
-    const trainInfo = await axios.get('https://rata.digitraffic.fi/api/v1/trains/2019-03-07/');
+    const trainInfo = await axios.get(`https://rata.digitraffic.fi/api/v1/trains/${date}/`);
     const trainsWithType = trains.data.map(t => {
       const train = trainInfo.data.find(tr => tr.trainNumber === t.trainNumber);
       const category = train ? train.trainCategory : 'Unknown';
@@ -50,7 +66,7 @@ const App = () => {
           subdomains='abcd'
           maxZoom={19}    
         />
-        {trains.filter(t => t.category === 'Unknown').map(t => 
+        {trains.filter(t => t.category === 'Long-distance').map(t => 
           <Marker key={t.trainNumber} position={t.location.coordinates.reverse()}>
             <Popup>
               {t.trainNumber} {t.category}
