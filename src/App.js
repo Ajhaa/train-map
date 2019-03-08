@@ -39,13 +39,18 @@ const App = () => {
 
   const fetchTrains = async () => {
     const date = getDateString();
-    console.log(date);
+
     const trains = await axios.get('https://rata.digitraffic.fi/api/v1/train-locations/latest/');
     const trainInfo = await axios.get(`https://rata.digitraffic.fi/api/v1/trains/${date}/`);
+
     const trainsWithType = trains.data.map(t => {
       const train = trainInfo.data.find(tr => tr.trainNumber === t.trainNumber);
+
       const category = train ? train.trainCategory : 'Unknown';
-      return {...t, category};
+      const commuter = train ? train.commuterLineID : null;
+      const type = commuter === '' && train ? train.trainType : null;
+
+      return {...t, category, commuter, type};
     })
 
     setTrains(trainsWithType);
@@ -54,22 +59,25 @@ const App = () => {
   const hook = () => {
     fetchTrains();
     setInterval(fetchTrains, 10000);
-  } 
+  }
+
   useEffect(hook, []);
 
   return(
     <div className='App'>
       <MapContainer center={[65, 26]} zoom={6}>
         <TileLayer
-          url='https://a.tile.openstreetmap.org/{z}/{x}/{y}.png '
+          url='https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
           attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
           subdomains='abcd'
           maxZoom={19}    
         />
-        {trains.filter(t => t.category === 'Long-distance').map(t => 
+        {trains.filter(t => t.category).map(t => 
           <Marker key={t.trainNumber} position={t.location.coordinates.reverse()}>
             <Popup>
-              {t.trainNumber} {t.category}
+              {t.commuter || t.type} {t.trainNumber} {t.category}
+              <br/>
+              speed: {t.speed} km/h
             </Popup>
           </Marker>)}
       </MapContainer>
