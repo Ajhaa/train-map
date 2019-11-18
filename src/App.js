@@ -68,7 +68,7 @@ const App = () => {
       <MapContainer center={[65, 26]} zoom={6}>
         <TileLayer
           url='https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
-          attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a> Train data from Traffic Management Finland / digitraffic.fi, licence CC 4.0 BY'
           subdomains='abcd'
           maxZoom={19}    
         />
