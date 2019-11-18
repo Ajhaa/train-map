@@ -3,7 +3,6 @@ import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import styled from 'styled-components';
 import L from 'leaflet';
 import axios from 'axios';
-import './App.css';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -29,7 +28,7 @@ const App = () => {
     const year = date.getFullYear();
 
     let month = date.getMonth() + 1;
-    if (month < 10) month = "0"+ month;
+    if (month < 10) month = "0" + month;
 
     let day = date.getDate();
     if (day < 10) day = "0" + day;
@@ -68,7 +67,7 @@ const App = () => {
       <MapContainer center={[65, 26]} zoom={6}>
         <TileLayer
           url='https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
-          attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a> Train data from Traffic Management Finland / digitraffic.fi, licence CC 4.0 BY'
+          attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a> Train data from Traffic Management Finland / <a href="https://www.digitraffic.fi">digitraffic.fi</a>, licence CC 4.0 BY'
           subdomains='abcd'
           maxZoom={19}    
         />
